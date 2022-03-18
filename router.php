@@ -25,12 +25,22 @@
                 //import da controller Contatos
                 require_once('controller/controllerContatos.php');
 
-                //Verificando o que foi passado para o action
-                if($action == 'INSERIR')
-                    //Enviando o objeto POST para a função inserirContato
-                    inserirContato($_POST);
-                    
-                break;
+                //Verificando o tipo de ação
+                if($action == 'INSERIR') {
+                    //Chama a função de inserir na controller e envia o objeto POST para a função inserirContato 
+                    $resposta = inserirContato($_POST);
+                    //Valida o tipo de dados que a controller retornou 
+                    if(is_bool($resposta)) { //Se for booleano
+                        //Verificar se o retorno foi verdadeiro
+                        if($resposta) {   
+                        //window.location.href -> Forçar ir para a index.
+                        echo("<script>alert('Registro inserido com sucesso!'); window.location.href = 'index.php' </script>");
+                        }
+                    //Se um retorno for um array significa que houve erro no processo de inserção 
+                    } else if(is_array($resposta))
+                            echo("<script>alert('não foi salvo'); window.location.href = 'index.php' </script>");
+                    }
+            break;
         }
 
     }
