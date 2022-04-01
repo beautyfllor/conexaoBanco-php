@@ -116,4 +116,37 @@
              return $arrayDados;
          }
     }
+
+    //Função para buscar um contato no BD, através do id do registro
+    function selectByIdContato($id) {
+        //Abre a conexao com o BD
+        $conexao = conexaoMysql();
+
+        //Script para listar todos os dados do BD
+        $sql = "select * from tblcontatos where idcontato = ".$id;
+
+        //Executa o script sql no BD e guarda o retorno dos dados, se houver
+        $result = mysqli_query($conexao, $sql);
+
+        //Valida se o BD retornou registros
+         if($result){
+            //Se houver dados... gera o array
+             if($rsDados = mysqli_fetch_assoc($result)){ 
+                 //Cria um array com os dados do BD
+                $arrayDados = array(
+                    "id"         => $rsDados['idcontato'],
+                    "nome"       => $rsDados['nome'],
+                    "telefone"   => $rsDados['telefone'],
+                    "celular"    => $rsDados['celular'],
+                    "email"      => $rsDados['email'],
+                    "obs"        => $rsDados['obs']
+                );
+             }
+
+             //Solicita o fechamento da conexão com o BD
+             fecharConexaoMysql($conexao);
+
+             return $arrayDados;
+         }
+    }
 ?>

@@ -40,21 +40,49 @@
                     //Se um retorno for um array significa que houve erro no processo de inserção 
                     } else if(is_array($resposta))
                             echo("<script>alert('". $resposta["message"] ."'); window.location.href = 'index.php' </script>");
-                    } elseif($action == 'DELETAR'){
-                        /*Recebe o id do registro que deverá ser excluído, que foi enviado 
-                        pela url no link da imagem do excluir que foi acionado na index*/
-                        $idContato = $_GET['id'];
+                } elseif($action == 'DELETAR'){
+                    /*Recebe o id do registro que deverá ser excluído, que foi enviado 
+                    pela url no link da imagem do excluir que foi acionado na index*/
+                    $idContato = $_GET['id'];
 
-                        $resposta = excluirContato($idContato);
+                    //Chama a função de excluir na controller
+                    $resposta = excluirContato($idContato);
 
-                        if(is_bool($resposta)){
-                            if($resposta) {
-                                echo("<script>alert('Registro excluído com sucesso!'); window.location.href = 'index.php' </script>");
-                            }
-                        }elseif(is_array($resposta)){
-                            echo("<script>alert('". $resposta["message"] ."'); window.location.href = 'index.php' </script>");
+                    if(is_bool($resposta)){
+                        if($resposta) {
+                            echo("<script>alert('Registro excluído com sucesso!'); window.location.href = 'index.php' </script>");
                         }
+                    }elseif(is_array($resposta)){
+                        echo("<script>alert('". $resposta["message"] ."'); window.location.href = 'index.php' </script>");
                     }
+                } elseif ($action == 'BUSCAR') {
+                    /*Recebe o id do registro que deverá ser editado, que foi enviado 
+                    pela url no link da imagem do editar que foi acionado na index*/
+                    $idContato = $_GET['id'];
+
+                    //Chama a função de buscar na controller
+                    $dados = buscarContato($idContato);
+
+                    /* Variável de sessão: mantém o valor ativo, independente das
+                    transições de página, só é desativada quando o navegador é fechado*/
+                    //A variável de sessão vem por padrão desabilitada
+
+                    //Ativa a utilização de variáveis de sessão no servidor
+                    session_start();
+
+                    //Guarda em uma  variável de sessão os dados que o BD retornou para a busca do id
+                    /*Obs:. Essa variável de sessão será utilizada na index.php, para colocar 
+                    os dados mnas caixas de texto*/ 
+                    $_SESSION['dadosContato'] = $dados;
+
+                    /*Utilizando o header também poderemos chamar a index.php, porém haverá uma ação 
+                    de carregamento no navegador (piscando a tela novamente)*/
+                    // header('location: index.php');
+
+                    /*Utilizando o require iremos apenas importar a tela da index, 
+                    assim não havendo um novo carregamento da página*/
+                    require_once('index.php');
+                }
             break;
         }
 
