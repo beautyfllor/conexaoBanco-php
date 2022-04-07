@@ -48,6 +48,7 @@
                     //Chama a função de excluir na controller
                     $resposta = excluirContato($idContato);
 
+                    //Retorna se a exclusão deu certo ou não
                     if(is_bool($resposta)){
                         if($resposta) {
                             echo("<script>alert('Registro excluído com sucesso!'); window.location.href = 'index.php' </script>");
