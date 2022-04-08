@@ -83,7 +83,24 @@
                     /*Utilizando o require iremos apenas importar a tela da index, 
                     assim não havendo um novo carregamento da página*/
                     require_once('index.php');
-                }
+                } elseif ($action == 'EDITAR') {
+
+                    //Recebe o id que foi encaminhado no action do form pela URL
+                    $idContato = $_GET['id'];
+
+                    //Chama a função de editar na controller e envia o objeto POST para a função atualizarContato 
+                    $resposta = atualizarContato($_POST, $idContato);
+                    //Valida o tipo de dados que a controller retornou 
+                    if(is_bool($resposta)) { //Se for booleano
+                        //Verificar se o retorno foi verdadeiro
+                        if($resposta) {   
+                        //window.location.href -> Forçar ir para a index.
+                        echo("<script>alert('Registro atualizado com sucesso!'); window.location.href = 'index.php' </script>");
+                        }
+                    //Se um retorno for um array significa que houve erro no processo de inserção 
+                    } else if(is_array($resposta))
+                            echo("<script>alert('". $resposta["message"] ."'); window.history.back(); </script>");
+                } 
             break;
         }
 
