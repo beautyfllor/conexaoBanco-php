@@ -90,6 +90,7 @@
 
                     //Chama a função de editar na controller e envia o objeto POST para a função atualizarContato 
                     $resposta = atualizarContato($_POST, $idContato);
+
                     //Valida o tipo de dados que a controller retornou 
                     if(is_bool($resposta)) { //Se for booleano
                         //Verificar se o retorno foi verdadeiro
@@ -99,7 +100,7 @@
                         }
                     //Se um retorno for um array significa que houve erro no processo de inserção 
                     } else if(is_array($resposta))
-                            echo("<script>alert('". $resposta["message"] ."'); window.history.back(); </script>");
+                        echo("<script>alert('". $resposta["message"] ."'); window.history.back(); </script>");
                 } 
             break;
         }

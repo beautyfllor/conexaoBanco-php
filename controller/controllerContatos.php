@@ -59,13 +59,13 @@
                     );
                     //Import do arquivo de modelagem para manipular o BD
                     require_once('model/bd/contato.php');
-                        //Chamando a função que fará o insert no BD (esta função está na model)
-                        if(updateContato($arrayDados))
-                            return true;
-                        else
-                            return array('idErro' => 1, 
-                                        'message' => 'Não foi possível atualizar os dados no Banco de Dados.'
-                            );
+                    //Chamando a função que fará o insert no BD (esta função está na model)
+                    if(updateContato($arrayDados))
+                        return true;
+                    else
+                        return array('idErro' => 1, 
+                                    'message' => 'Não foi possível atualizar os dados no Banco de Dados.'
+                        );
                 } else
                     return array('idErro' => 4, 
                                 "message" => "Não é possível editar um registro sem informar um id válido."        
@@ -131,8 +131,7 @@
 
         } else {
             return array('idErro' => 4, 
-            "message" => "Não é possível buscar um registro sem informar um id válido."        
-)           ;
+                        "message" => "Não é possível buscar um registro sem informar um id válido.");
         }
     }
 ?>
