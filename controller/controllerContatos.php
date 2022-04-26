@@ -9,15 +9,26 @@
 
      //Função para receber dados da Wiew e encaminhar para a Model (inserir)
      function inserirContato ($dadosContato, $file) {
+
+        $nomeFoto = (string) null;
+
         //Validação para verificar se o objeto está vazio
         if(!empty($dadosContato)){
             //Validação de caixa vazia dos elementos nome, celular e email, pois são obrigatórios no banco de dados
             if(!empty($dadosContato['txtNome']) && !empty($dadosContato['txtCelular']) && !empty($dadosContato['txtEmail'])){/*O que fica no colchete é o 'name' da input*/
+                //Validação para identificar se chegou um arquivo para upload
                 if($file != null) {
+                    //Import da função de upload
                     require_once('modulo/upload.php');
-                    $resultado = uploadFile($file['fleFoto']);
-                    echo($resultado);
-                    die;
+
+                    //Chama a função de upload
+                    $nomeFoto = uploadFile($file['fleFoto']);
+                    
+                    if(is_array($nomeFoto)) {
+                        /*Caso aconteça um erro no upload, a função irá retornar um array com a mensagem de erro. 
+                        Esse array será retornado para a router e ela exibirá o resultado para o usuário*/
+                        return $nomeFoto;
+                    }
                 }
                 //Criação de um array de dados que será encaminhado a model para inserir no BD, 
                 //é importante criar este array conforme as necessidades de manipulação do BD
@@ -27,7 +38,8 @@
                     "telefone" => $dadosContato['txtTelefone'],
                     "celular"  => $dadosContato['txtCelular'],
                     "email"    => $dadosContato['txtEmail'],
-                    "obs"      => $dadosContato['txtObs']
+                    "obs"      => $dadosContato['txtObs'],
+                    "foto"     => $nomeFoto
                 );
                 //Import do arquivo de modelagem para manipular o BD
                 require_once('model/bd/contato.php');

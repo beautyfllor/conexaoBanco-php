@@ -25,13 +25,15 @@
                     telefone, 
                     celular, 
                     email, 
-                    obs)
+                    obs,
+                    foto)
                 values
                     ('".$dadosContato['nome']."', 
                     '".$dadosContato['telefone']."', 
                     '".$dadosContato['celular']."',
                     '".$dadosContato['email']."', 
-                    '".$dadosContato['obs']."');";
+                    '".$dadosContato['obs']."',
+                    '".$dadosContato['foto']."');";
 
         //Executa um script no BD -> Dentro dos (quem é o BD, o que vc quer que eu mande para o BD)
             //Validação para verificar se o script 'sql' está certo
@@ -132,7 +134,8 @@
                     "telefone"   => $rsDados['telefone'],
                     "celular"    => $rsDados['celular'],
                     "email"      => $rsDados['email'],
-                    "obs"        => $rsDados['obs']
+                    "obs"        => $rsDados['obs'],
+                    "foto"       => $rsDados['foto']
                 );
                 $cont++;
              }

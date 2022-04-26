@@ -58,9 +58,6 @@
                     //Montando novamento o nome do arquivo com a extensão 
                     $foto = $nomeCripty.".".$extensao;
 
-                    echo($foto);
-                    die;
-
                     if(move_uploaded_file($tempFile, DIRETORIO_FILE_UPLOAD.$foto)) {
                         return $foto;
                     } else {
