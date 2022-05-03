@@ -62,7 +62,8 @@
                     telefone    = '".$dadosContato['telefone']."', 
                     celular     = '".$dadosContato['celular']."', 
                     email       = '".$dadosContato['email']."', 
-                    obs         = '".$dadosContato['obs']."'
+                    obs         = '".$dadosContato['obs']."',
+                    foto         = '".$dadosContato['foto']."'
                 where idcontato =".$dadosContato['id'];
 
         //Executa um script no BD -> Dentro dos (quem é o BD, o que vc quer que eu mande para o BD)
@@ -169,7 +170,8 @@
                     "telefone"   => $rsDados['telefone'],
                     "celular"    => $rsDados['celular'],
                     "email"      => $rsDados['email'],
-                    "obs"        => $rsDados['obs']
+                    "obs"        => $rsDados['obs'],
+                    "foto"       => $rsDados['foto']
                 );
              }
 
