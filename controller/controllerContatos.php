@@ -17,8 +17,8 @@
 
         //Validação para verificar se o objeto está vazio
         if(!empty($dadosContato)){
-            //Validação de caixa vazia dos elementos nome, celular e email, pois são obrigatórios no banco de dados
-            if(!empty($dadosContato['txtNome']) && !empty($dadosContato['txtCelular']) && !empty($dadosContato['txtEmail'])){/*O que fica no colchete é o 'name' da input*/
+            //Validação de caixa vazia dos elementos nome, celular, email e estado, pois são obrigatórios no banco de dados
+            if(!empty($dadosContato['txtNome']) && !empty($dadosContato['txtCelular']) && !empty($dadosContato['txtEmail']) && !empty($dadosContato['sltEstado'])){/*O que fica no colchete é o 'name' da input*/
                 //Validação para identificar se chegou um arquivo para upload
                 if($file['fleFoto']['name'] != null) {
                     //Import da função de upload
@@ -42,7 +42,8 @@
                     "celular"  => $dadosContato['txtCelular'],
                     "email"    => $dadosContato['txtEmail'],
                     "obs"      => $dadosContato['txtObs'],
-                    "foto"     => $nomeFoto
+                    "foto"     => $nomeFoto,
+                    "idestado" => $dadosContato['sltEstado']
                 );
                 //Import do arquivo de modelagem para manipular o BD
                 require_once('model/bd/contato.php');
@@ -180,8 +181,10 @@
 
     //Função para solicitar os dados da model e encaminhar a lista de contatos para a View
     function listarContato () {
+
         //Import do arquivo que vai buscar os dados
         require_once('model/bd/contato.php');
+        
         //Chama a função que vai listar os dados no BD
         $dados = selectAllContatos();
 

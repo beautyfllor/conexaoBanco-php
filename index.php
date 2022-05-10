@@ -60,6 +60,29 @@
                             <input type="text" name="txtNome" value="<?= isset($nome)?$nome:null ?>" placeholder="Digite seu Nome" maxlength="100">
                         </div>
                     </div>
+
+                    <div class="campos">
+                        <div class="cadastroInformacoesPessoais">
+                            <label> Estado: </label>
+                        </div>
+                        <div class="cadastroEntradaDeDados">
+                            <select name="sltEstado">
+                            <option value="">Selecione um item</option>
+                                <?php
+                                    require_once('controller/controllerEstados.php');
+
+                                    $listEstados = listarEstado();
+
+                                    foreach ($listEstados as $item) {
+
+                                        ?>
+                                            <option value="<?=$item['idestado']?>"><?=$item['nome']?></option>
+                                            <?php
+                                    }
+                                    ?>
+                            </select>
+                        </div>
+                    </div>
                                      
                     <div class="campos">
                         <div class="cadastroInformacoesPessoais">
@@ -136,32 +159,34 @@
                     //Import do arquivo da controller para solicitar a listagem dos dados
                     require_once('controller/controllerContatos.php');
                     //Chama a função que vai retornar os dados de contatos
-                    $listContato = listarContato();
-                    //Estrutura de repetição para retornar os dados do array e printar na tela
-                    foreach($listContato as $item){
-                        $foto = $item['foto'];
+                    if($listContato = listarContato()) {
+
+                        //Estrutura de repetição para retornar os dados do array e printar na tela
+                        foreach($listContato as $item){
+                            $foto = $item['foto'];
                 ?>
                 
-                <tr id="tblLinhas">
-                    <td class="tblColunas registros"><?=$item['nome']?></td>
-                    <td class="tblColunas registros"><?=$item['celular']?></td>
-                    <td class="tblColunas registros"><?=$item['email']?></td>
-                    <td class="tblColunas registros"><img src="<?=DIRETORIO_FILE_UPLOAD.$foto?>" alt="Foto" class="foto"></td>
-                   
-                    <td class="tblColunas registros">
-                        <a href="router.php?component=contatos&action=buscar&id=<?=$item['id']?>">
-                            <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
-                        </a>
-                           
-                        <a onclick="return confirm('Deseja realmente excluir esse item?');" href="router.php?component=contatos&action=deletar&id=<?=$item['id']?>&foto=<?=$foto?>">
-                            <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir" id="excluir">
-                        </a>
+                    <tr id="tblLinhas">
+                        <td class="tblColunas registros"><?=$item['nome']?></td>
+                        <td class="tblColunas registros"><?=$item['celular']?></td>
+                        <td class="tblColunas registros"><?=$item['email']?></td>
+                        <td class="tblColunas registros"><img src="<?=DIRETORIO_FILE_UPLOAD.$foto?>" alt="Foto" class="foto"></td>
+                    
+                        <td class="tblColunas registros">
+                            <a href="router.php?component=contatos&action=buscar&id=<?=$item['id']?>">
+                                <img src="img/edit.png" alt="Editar" title="Editar" class="editar">
+                            </a>
+                            
+                            <a onclick="return confirm('Deseja realmente excluir esse item?');" href="router.php?component=contatos&action=deletar&id=<?=$item['id']?>&foto=<?=$foto?>">
+                                <img src="img/trash.png" alt="Excluir" title="Excluir" class="excluir" id="excluir">
+                            </a>
 
-                        <img src="img/search.png" alt="Visualizar" title="Visualizar" class="pesquisar">
-                    </td>
-                </tr>
+                            <img src="img/search.png" alt="Visualizar" title="Visualizar" class="pesquisar">
+                        </td>
+                    </tr>
                 <?php
                     }
+                }
                 ?>
             </table>
         </div>

@@ -26,14 +26,17 @@
                     celular, 
                     email, 
                     obs,
-                    foto)
+                    foto,
+                    idestado)
                 values
                     ('".$dadosContato['nome']."', 
                     '".$dadosContato['telefone']."', 
                     '".$dadosContato['celular']."',
                     '".$dadosContato['email']."', 
                     '".$dadosContato['obs']."',
-                    '".$dadosContato['foto']."');";
+                    '".$dadosContato['foto']."',
+                    '".$dadosContato['idestado']."'
+                );";
 
         //Executa um script no BD -> Dentro dos (quem é o BD, o que vc quer que eu mande para o BD)
             //Validação para verificar se o script 'sql' está certo
@@ -144,7 +147,11 @@
              //Solicita o fechamento da conexão com o BD
              fecharConexaoMysql($conexao);
 
-             return $arrayDados;
+             //Validação para ver se o array existe - (banco vazio)
+             if(isset($arrayDados))
+                return $arrayDados;
+            else
+                return false;
          }
     }
 
