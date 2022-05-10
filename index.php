@@ -177,6 +177,7 @@
                         <td class="tblColunas registros"><?=$item['nome']?></td>
                         <td class="tblColunas registros"><?=$item['celular']?></td>
                         <td class="tblColunas registros"><?=$item['email']?></td>
+                        //Arruma a listagem dos estados
                         <td class="tblColunas registros"><?=$item['idestado']?></td>
                         <td class="tblColunas registros"><img src="<?=DIRETORIO_FILE_UPLOAD.$foto?>" alt="Foto" class="foto"></td>
                     
