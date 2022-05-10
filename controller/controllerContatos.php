@@ -7,6 +7,9 @@
      * Versão: 1.0
      ****************************************************************************/
 
+     //Import do arquivo de configuração
+     require_once('modulo/config.php');
+
      //Função para receber dados da Wiew e encaminhar para a Model (inserir)
      function inserirContato ($dadosContato, $file) {
 
@@ -60,6 +63,8 @@
      //Função para receber dados da Wiew e encaminhar para a Model (atualizar)
      function atualizarContato ($dadosContato, $arrayDados) {
 
+        $statusUpload = (boolean) false;
+
         //Recebe o id enviado pelo arrayDados
         $id = $arrayDados['id'];
 
@@ -78,14 +83,14 @@
                 if(!empty($id) && $id != 0 && is_numeric($id)) {
 
                     //Validação para identificar se será enviado ao servidor uma nova foto
-                    if($file['flefoto']['name'] != null) {
+                    if($file['fleFoto']['name'] != null) {
                         //Import da função de upload
                         require_once('modulo/upload.php');
 
                         //Chama a função de upload para enviar a nova foto ao servidor
                         $novaFoto = uploadFile($file['fleFoto']);
 
-                        unlink(DIRETORIO_FILE_UPLOAD.$foto);
+                        $statusUpload = true;
                     } else {
                         //Permanece a mesma foto no BD
                         $novaFoto = $foto;
@@ -104,10 +109,18 @@
                     );
                     //Import do arquivo de modelagem para manipular o BD
                     require_once('model/bd/contato.php');
+
                     //Chamando a função que fará o insert no BD (esta função está na model)
-                    if(updateContato($arrayDados))
+                    if(updateContato($arrayDados)) {
+                        /* *Validação para verificar se será necessário apagar a foto antiga
+                        * Esta variável foi ativada true na linha 90, quando realizamos 
+                        o upload em uma nova foto no servidor*/
+                        if($statusUpload) {
+                            //Apaga a foto antiga da pasta do servidor
+                            unlink(DIRETORIO_FILE_UPLOAD.$foto);
+                        }
                         return true;
-                    else
+                    } else
                         return array('idErro' => 1, 
                                     'message' => 'Não foi possível atualizar os dados no Banco de Dados.'
                         );
