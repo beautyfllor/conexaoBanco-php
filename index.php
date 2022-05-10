@@ -15,17 +15,21 @@
     //Variável para carregar o nome da foto do BD
     $foto = (string) null;
 
+    //Variável para ser utilizada no carregar dos estados (Opção de editar)
+    $idestado = (string) null;
+
     //Valida se a utilização de variáveis de sessão está ativa no servidor
     if(session_status()){
         //Valida se a variável de sessão dadosContato não está vazia
         if(!empty($_SESSION['dadosContato'])){
-            $id         = $_SESSION['dadosContato']['id'];
-            $nome       = $_SESSION['dadosContato']['nome'];
-            $telefone   = $_SESSION['dadosContato']['telefone'];
-            $celular    = $_SESSION['dadosContato']['celular'];
-            $email      = $_SESSION['dadosContato']['email'];
-            $obs        = $_SESSION['dadosContato']['obs'];
-            $foto       = $_SESSION['dadosContato']['foto'];
+            $id             = $_SESSION['dadosContato']['id'];
+            $nome           = $_SESSION['dadosContato']['nome'];
+            $telefone       = $_SESSION['dadosContato']['telefone'];
+            $celular        = $_SESSION['dadosContato']['celular'];
+            $email          = $_SESSION['dadosContato']['email'];
+            $obs            = $_SESSION['dadosContato']['obs'];
+            $foto           = $_SESSION['dadosContato']['foto'];
+            $idestado       = $_SESSION['dadosContato']['idestado'];
 
             //Mudamos a ação do form para editar o registro no click do botão salvar
             $form = "router.php?component=contatos&action=editar&id=".$id."&foto=".$foto;
@@ -69,17 +73,19 @@
                             <select name="sltEstado">
                             <option value="">Selecione um item</option>
                                 <?php
+                                    //Import da controller de estados
                                     require_once('controller/controllerEstados.php');
 
+                                    //Chama a função para carregar todos os estados do BD
                                     $listEstados = listarEstado();
 
                                     foreach ($listEstados as $item) {
 
                                         ?>
-                                            <option value="<?=$item['idestado']?>"><?=$item['nome']?></option>
-                                            <?php
+                                            <option <?= $idestado == $item['idestado']?'selected':null ?> value="<?=$item['idestado']?>"><?=$item['nome']?></option>
+                                        <?php
                                     }
-                                    ?>
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -151,6 +157,7 @@
                     <td class="tblColunas destaque"> Nome </td>
                     <td class="tblColunas destaque"> Celular </td>
                     <td class="tblColunas destaque"> Email </td>
+                    <td class="tblColunas destaque"> Estado </td>
                     <td class="tblColunas destaque"> Foto </td>
                     <td class="tblColunas destaque"> Opções </td>
                 </tr>
@@ -170,6 +177,7 @@
                         <td class="tblColunas registros"><?=$item['nome']?></td>
                         <td class="tblColunas registros"><?=$item['celular']?></td>
                         <td class="tblColunas registros"><?=$item['email']?></td>
+                        <td class="tblColunas registros"><?=$item['idestado']?></td>
                         <td class="tblColunas registros"><img src="<?=DIRETORIO_FILE_UPLOAD.$foto?>" alt="Foto" class="foto"></td>
                     
                         <td class="tblColunas registros">

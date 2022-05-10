@@ -106,7 +106,8 @@
                         "celular"  => $dadosContato['txtCelular'],
                         "email"    => $dadosContato['txtEmail'],
                         "obs"      => $dadosContato['txtObs'],
-                        "foto"     => $novaFoto
+                        "foto"     => $novaFoto,
+                        "idestado" => $dadosContato['sltEstado']
                     );
                     //Import do arquivo de modelagem para manipular o BD
                     require_once('model/bd/contato.php');
