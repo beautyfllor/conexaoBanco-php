@@ -8,7 +8,7 @@
      ****************************************************************************/
 
      //Import do arquivo de configuração
-     require_once('modulo/config.php');
+     require_once(SRC.'modulo/config.php');
 
      //Função para receber dados da Wiew e encaminhar para a Model (inserir)
      function inserirContato ($dadosContato, $file) {
@@ -184,7 +184,7 @@
     function listarContato () {
 
         //Import do arquivo que vai buscar os dados
-        require_once('model/bd/contato.php');
+        require_once(SRC.'model/bd/contato.php');
         
         //Chama a função que vai listar os dados no BD
         $dados = selectAllContatos();
