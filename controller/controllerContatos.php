@@ -202,7 +202,7 @@
         if($id != 0 && !empty($id) && is_numeric($id)) {
 
             //Import do arquivo de contato - model
-            require_once('model/bd/contato.php');
+            require_once(SRC.'model/bd/contato.php');
 
             //Chama a função na model que vai buscar no BD
             $dados = selectByIdContato($id);
