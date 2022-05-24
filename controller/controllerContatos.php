@@ -150,10 +150,10 @@
         if($id != 0 && !empty($id) && is_numeric($id)) {
 
             //Import do arquivo de contato - model
-            require_once('model/bd/contato.php');
+            require_once(SRC.'model/bd/contato.php');
 
             //Import do arquivo de configurações do projeto
-            require_once('modulo/config.php');
+            // require_once('modulo/config.php');
 
             //Chama a função da model e valida se o retorno foi true ou false
             if(deleteContato($id)) {
@@ -161,15 +161,15 @@
                 if($foto != null) {
                      /*unlink() - função para excluir um arquivo físico de um diretório*/
                     /*Permite apagar a foto fisicamente do diretório do servidor*/
-                    if(unlink(DIRETORIO_FILE_UPLOAD.$foto))
+                    if(unlink(SRC.DIRETORIO_FILE_UPLOAD.$foto))
                         return true;
                     else
                         return array( 'idErro' => 5, 
-                                'message' => 'O registro foi excluído, mas a imagem não'
+                                    "message" => "O registro foi excluído, mas a imagem não."
                         );
                     
-                }
-                return true;
+                } else
+                    return true;
             }else
                 return array('idErro' => 3, 
                             "message" => "O banco de dados não pode excluir o registro."

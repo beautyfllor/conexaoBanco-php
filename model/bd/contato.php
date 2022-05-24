@@ -101,7 +101,10 @@
             if(mysqli_affected_rows($conexao))
                 $statusResposta = true;
         }
+        
+        //Solicita o fechamento da conexão com o BD
         fecharConexaoMysql($conexao);
+
         return $statusResposta;
     }
     //Função para listar todos os contatos do BD
@@ -188,7 +191,11 @@
              //Solicita o fechamento da conexão com o BD
              fecharConexaoMysql($conexao);
 
-             return $arrayDados;
+             //Validação para ver se o array existe - (banco vazio)
+             if(isset($arrayDados))
+                return $arrayDados;
+            else
+                return false;
          }
     }
 ?>
