@@ -61,7 +61,7 @@
                             <label> Nome: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="text" name="txtNome" value="<?= isset($nome)?$nome:null ?>" placeholder="Digite seu Nome" maxlength="100">
+                            <input type="text" name="nome" value="<?= isset($nome)?$nome:null ?>" placeholder="Digite seu Nome" maxlength="100">
                         </div>
                     </div>
 
@@ -70,7 +70,7 @@
                             <label> Estado: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <select name="sltEstado">
+                            <select name="estado">
                             <option value="">Selecione um item</option>
                                 <?php
                                     //Import da controller de estados
@@ -95,7 +95,7 @@
                             <label> Telefone: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="tel" name="txtTelefone" value="<?= isset($telefone)?$telefone:null ?>">
+                            <input type="tel" name="telefone" value="<?= isset($telefone)?$telefone:null ?>">
                         </div>
                     </div>
                     <div class="campos">
@@ -103,7 +103,7 @@
                             <label> Celular: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="tel" name="txtCelular" value="<?= isset($celular)?$celular:null ?>">
+                            <input type="tel" name="celular" value="<?= isset($celular)?$celular:null ?>">
                         </div>
                     </div>
                    
@@ -113,7 +113,7 @@
                             <label> Email: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <input type="email" name="txtEmail" value="<?= isset($email)?$email:null ?>">
+                            <input type="email" name="email" value="<?= isset($email)?$email:null ?>">
                         </div>
                     </div>
                     <div class="campos">
@@ -122,7 +122,7 @@
                         </div>
                         <div class="cadastroEntradaDeDados">
                             <!-- Para adicionar um arquivo, um input do tipo file,com a opção 'accept', colocando as extensões aceitáveis -->
-                           <input type="file" name="fleFoto" accept=".jpg, .png, .jpeg, .gif">
+                           <input type="file" name="foto" accept=".jpg, .png, .jpeg, .gif">
                         </div>
                     </div>
                     <div class="campos">
@@ -130,7 +130,7 @@
                             <label> Observações: </label>
                         </div>
                         <div class="cadastroEntradaDeDados">
-                            <textarea name="txtObs" cols="50" rows="7"><?= isset($obs)?$obs:null ?></textarea>
+                            <textarea name="obs" cols="50" rows="7"><?= isset($obs)?$obs:null ?></textarea>
                         </div>
                     </div>
 
@@ -177,7 +177,6 @@
                         <td class="tblColunas registros"><?=$item['nome']?></td>
                         <td class="tblColunas registros"><?=$item['celular']?></td>
                         <td class="tblColunas registros"><?=$item['email']?></td>
-                        //Arruma a listagem dos estados
                         <td class="tblColunas registros"><?=$item['idestado']?></td>
                         <td class="tblColunas registros"><img src="<?=DIRETORIO_FILE_UPLOAD.$foto?>" alt="Foto" class="foto"></td>
                     
