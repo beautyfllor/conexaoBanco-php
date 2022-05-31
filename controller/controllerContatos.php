@@ -70,34 +70,35 @@
     }
 
      //Função para receber dados da Wiew e encaminhar para a Model (atualizar)
-     function atualizarContato ($dadosContato, $arrayDados) {
+     function atualizarContato ($dadosContato) {
 
         $statusUpload = (boolean) false;
 
         //Recebe o id enviado pelo arrayDados
-        $id = $arrayDados['id'];
+        $id = $dadosContato['id'];
 
         //Recebe a foto enviada pelo arrayDados (nome da foto já existente no BD)
-        $foto = $arrayDados['foto'];
+        $foto = $dadosContato['foto'];
 
         //Recebe o objeto de array referente a nova foto que poderá ser enviada ao servidor
-        $file = $arrayDados['file'];
+        $file = $dadosContato['file'];
 
         //Validação para verificar se o objeto está vazio
         if(!empty($dadosContato)){
             //Validação de caixa vazia dos elementos nome, celular e email, pois são obrigatórios no banco de dados
-            if(!empty($dadosContato['txtNome']) && !empty($dadosContato['txtCelular']) && !empty($dadosContato['txtEmail'])){/*O que fica no colchete é o 'name' da input*/
+            if(!empty($dadosContato[0]['nome']) && !empty($dadosContato[0]['celular']) && !empty($dadosContato[0]['email'])){/*O que fica no colchete é o 'name' da input*/
 
                 //Validação para garantir que o id seja válido
                 if(!empty($id) && $id != 0 && is_numeric($id)) {
 
                     //Validação para identificar se será enviado ao servidor uma nova foto
-                    if($file['fleFoto']['name'] != null) {
+                    if($file['foto']['name'] != null) {
+
                         //Import da função de upload
-                        require_once('modulo/upload.php');
+                        require_once(SRC.'modulo/upload.php');
 
                         //Chama a função de upload para enviar a nova foto ao servidor
-                        $novaFoto = uploadFile($file['fleFoto']);
+                        $novaFoto = uploadFile($file['foto']);
 
                         $statusUpload = true;
                     } else {
@@ -105,20 +106,22 @@
                         $novaFoto = $foto;
                     }
 
-                    //Criação de um array de dados que será encaminhado a model para inserir no BD, é importante criar este array conforme as necessidades de manipulação do BD
+                    /*Criação de um array de dados que será encaminhado a model para inserir no BD, 
+                    é importante criar este array conforme as necessidades de manipulação do BD*/
                     //OBS: criar as chaves do array conforme os nomes dos atributos do BD.
                     $arrayDados = array (
                         "id"       => $id,
-                        "nome"     => $dadosContato['txtNome'],
-                        "telefone" => $dadosContato['txtTelefone'],
-                        "celular"  => $dadosContato['txtCelular'],
-                        "email"    => $dadosContato['txtEmail'],
-                        "obs"      => $dadosContato['txtObs'],
+                        "nome"     => $dadosContato[0]['nome'],
+                        "telefone" => $dadosContato[0]['telefone'],
+                        "celular"  => $dadosContato[0]['celular'],
+                        "email"    => $dadosContato[0]['email'],
+                        "obs"      => $dadosContato[0]['obs'],
                         "foto"     => $novaFoto,
-                        "idestado" => $dadosContato['sltEstado']
+                        "idestado" => $dadosContato[0]['estado']
                     );
+
                     //Import do arquivo de modelagem para manipular o BD
-                    require_once('model/bd/contato.php');
+                    require_once(SRC.'model/bd/contato.php');
 
                     //Chamando a função que fará o insert no BD (esta função está na model)
                     if(updateContato($arrayDados)) {
@@ -127,7 +130,7 @@
                         o upload em uma nova foto no servidor*/
                         if($statusUpload) {
                             //Apaga a foto antiga da pasta do servidor
-                            unlink(DIRETORIO_FILE_UPLOAD.$foto);
+                            unlink(SRC.DIRETORIO_FILE_UPLOAD.$foto);
                         }
                         return true;
                     } else

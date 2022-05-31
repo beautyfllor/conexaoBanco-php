@@ -4,6 +4,13 @@
      *  $request    - Recebe dados do corpo da requisição (JSON, FORM/DATA, XML, etc..).
      *  $response   - Envia dados de retorno da API.
      *  $args       - Permite receber dados de atributos na API.
+     * 
+     * Os métodos de requisição para uma API são:
+     * GET          - Para buscar dados;
+     * POST         - Para inserir um novo dado;
+     * DELETE       - Para apagar dados;
+     * PUT/PATCH    - Para editar um dado já existente.
+     *      O mais utilizado é o PUT
      */
 
     //Import do arquivo autoload, que fará as instâncias do slim
@@ -12,7 +19,7 @@
     //Criando um objeto do slim chamado app, para configurar os Endpoints
     $app = new \Slim\App();
 
-    //EndPoint: Requisição para listar todos os contatos
+    //EndPoint: Requisição para LISTAR TODOS os contatos
     $app->get('/contatos', function($request, $response, $args){
 
         //Import do arquivo de configuração do projeto, para que a constante 'SRC' exista na controller
@@ -36,7 +43,7 @@
         }
     });
 
-    //EndPoint: Requisição para listar contatos pelo id
+    //EndPoint: Requisição para LISTAR contatos pelo ID
     $app->get('/contatos/{id}', function($request, $response, $args){
 
         //Recebe o id do registro que devrá ser retornado pela API
@@ -77,7 +84,7 @@
         }
     });
 
-    //EndPoint: Requisição para deletar contatos pelo id
+    //EndPoint: Requisição para DELETAR contatos pelo id
     $app->delete('/contatos/{id}', function($request, $response, $args) {
 
         if(is_numeric($args['id'])) {
@@ -148,7 +155,7 @@
         }
     });
 
-    //EndPoint: Requisição para inserir um novo contato
+    //EndPoint: Requisição para INSERIR um novo contato
     $app->post('/contatos', function($request, $response, $args){
 
         //Recebe o header da requisição e qual será o Content-Type
@@ -207,7 +214,6 @@
                                                 "Erro": '.$dadosJSON.'
                                                 }');
                 }
-
                 break;
             case 'application/json':
 
@@ -224,6 +230,107 @@
                                 ->withHeader('Content-Type', 'application/json') 
                                 ->write('{"message": "Formato do Content-Type não é válido para essa requisição"}');
                 break;
+        }
+    });
+
+    //EndPoint: Requisição para EDITAR um contato, simulando o PUT
+    $app->post('/contatos/{id}', function($request, $response, $args){
+
+        if(is_numeric($args['id'])) {
+
+            //Recebe o id enviado no EndPoint através da variável id
+            $id = $args['id'];
+        
+            //Recebe o header da requisição e qual será o Content-Type
+            $contentTypeHeader = $request->getHeaderLine('Content-Type');
+
+            //Cria um array,pois dependendo do content-type temos mais informações separadas pelo (;)
+            $contentType = explode(";", $contentTypeHeader);
+
+            switch ($contentType[0]) {
+                case 'multipart/form-data':
+
+                    //Import do arquivo de configuração do projeto, para que a constante 'SRC' exista na controller
+                    require_once('../modulo/config.php');
+
+                    //Import da controller de contatos, que fará a busca de dados
+                    require_once('../controller/controllerContatos.php');
+
+                    //Chama a função para buscar a foto que já está salva no BD
+                    if($dadosContato = buscarContato($id)) {
+                        $fotoAtual = $dadosContato['foto'];
+
+                        //Recebe os dados comuns enviado pelo corpo da requisição
+                        $dadosBody = $request->getParsedBody();
+                        
+                        //Recebe uma imagem enviada pelo corpo da requisição
+                        $uploadFiles = $request->getUploadedFiles();
+
+                        /*Cria um array com todos os dados que chegaram pela requisição, devido aos dados 
+                        serem protegidos, criamos um array e recuperamos os dados pelos métodos do objeto*/
+                        $arrayFoto = array(    "name"      => $uploadFiles['foto']->getClientFileName(),
+                                                "type"      => $uploadFiles['foto']->getClientMediaType(),
+                                                "size"      => $uploadFiles['foto']->getSize(),
+                                                "tmp_name"  => $uploadFiles['foto']->file
+                        );
+
+                        //Cria uma chave chamada "foto" para colocar todos os dados do objeto, conforme é gerado em form HTML
+                        $file = array("foto" => $arrayFoto);
+
+                        //Cria um array com todos os dados comuns do arquivo que será enviado para o servidor
+                        $arrayDados = array(    $dadosBody,
+                                                "file" => $file,
+                                                "id"   => $id,
+                                                "foto" => $fotoAtual
+                        );
+
+                        //Chama a função da controller para inserir os dados
+                        $resposta = atualizarContato($arrayDados);
+
+                        if(is_bool($resposta) && $resposta == true) {
+
+                            return $response    ->withStatus(200) 
+                                                ->withHeader('Content-Type', 'application/json') 
+                                                ->write('{"message": "Registro atualizado com sucesso."}');
+                        } elseif(is_array($resposta) && $resposta['idErro']) {
+
+                            //Cria o JSON dos dados do erro
+                            $dadosJSON = createJSON($resposta);
+
+                            return $response    ->withStatus(400)
+                                                ->withHeader('Content-Type', 'application/json')
+                                                ->write('{"message": "Houve um problema no processo de editar",
+                                                        "Erro": '.$dadosJSON.'
+                                                        }');
+                        }
+                    } else {
+                        //Retorna um erro que significa que o cliente informou um id inválido
+                        return $response    ->withStatus(404) 
+                                            ->withHeader('Content-Type', 'application/json') 
+                                            ->write('{"message": "O id informado não existe na base de dados."}'); 
+                    }
+                    break;
+                case 'application/json':
+
+                    $dadosBody = $request->getParsedBody();
+                    var_dump($dadosBody);
+                    die;
+
+                    return $response    ->withStatus(200) 
+                                        ->withHeader('Content-Type', 'application/json') 
+                                        ->write('{"message": "Formato selecionado foi JSON"}');
+                    break;
+                default:
+                return $response    ->withStatus(400) 
+                                    ->withHeader('Content-Type', 'application/json') 
+                                    ->write('{"message": "Formato do Content-Type não é válido para essa requisição"}');
+                    break;
+            }
+        } else {
+            //Retorna um erro que significa que o cliente passou dados errados
+            return $response    ->withStatus(404) 
+                                ->withHeader('Content-Type', 'application/json') 
+                                ->write('{"message": "É obtigatório informar um id com formato válido (número)."}'); 
         }
     });
 
