@@ -1,6 +1,7 @@
 <?php
     /*********************************************************
-     * Objetivo: Arquivo principal da API que irá receber a url requisitada e redirecionar para as APIs. (router)
+     * Objetivo: Arquivo principal da API que irá receber a url 
+     * requisitada e redirecionar para as APIs. (papel da router)
      * Autora: Florbela
      * Data: 19/05/2022
      * Versão: 1.0

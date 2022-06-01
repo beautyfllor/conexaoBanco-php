@@ -6,7 +6,7 @@
      * Versão: 1.0
      **********************************************************************/
 
-    //Constantes para estabeleecer a conexão com o banco de dados (local do BD, usuário, senha e database)
+    //Constantes para estabelecer a conexão com o banco de dados (local do BD, usuário, senha e database)
     const SERVER = 'localhost';
     const USER = 'root';
     const PASSWORD = 'bcd127';
